@@ -9,11 +9,29 @@ def main_menu():
 def new_expense():
     name = input("What is new expense: ")
     cost = input("What was the cost: ")
-    print(f"Expense: {name}, Cost: {cost}")
+
+    with open("data.txt", "a") as file:
+        file.write(f"{name},{cost}\n")
+
+    print("Expense saved successfully")
 
 
 def view_expense():
-    print("view_expense_selected")
+    try:
+        with open("data.txt", "r") as file:
+            data = file.readlines()
+
+        if not data:
+            print("No expenses found")
+            return
+
+        print("\n--- Your Expenses ---")
+        for exp in data:
+            name, cost = exp.strip().split(",")
+            print(f"{name} : ₹{cost}")
+
+    except FileNotFoundError:
+        print("No expenses file found")
 
 
 def expense_analysis():
@@ -25,24 +43,29 @@ def habit_tracker():
 
 
 def save_and_exit():
-    print("data is saved successfully")
+    print("Data saved successfully")
     exit()
 
 
-# MAIN PROGRAM LOOP
+# 🔁 MAIN LOOP (THIS WAS MISSING)
 while True:
     main_menu()
-    choice = int(input("Choose from 1 to 5: "))
 
-    if choice == 1:
-        new_expense()
-    elif choice == 2:
-        view_expense()
-    elif choice == 3:
-        expense_analysis()
-    elif choice == 4:
-        habit_tracker()
-    elif choice == 5:
-        save_and_exit()
-    else:
-        print("Invalid choice. Try again.")
+    try:
+        choice = int(input("Choose from 1 to 5: "))
+
+        if choice == 1:
+            new_expense()
+        elif choice == 2:
+            view_expense()
+        elif choice == 3:
+            expense_analysis()
+        elif choice == 4:
+            habit_tracker()
+        elif choice == 5:
+            save_and_exit()
+        else:
+            print("Invalid choice. Enter 1 to 5.")
+
+    except ValueError:
+        print("Please enter a NUMBER only.")
