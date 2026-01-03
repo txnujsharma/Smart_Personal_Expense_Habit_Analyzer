@@ -1,3 +1,5 @@
+import datetime
+
 def main_menu():
     print("\n1. Add Expense")
     print("2. View Expenses")
@@ -7,35 +9,51 @@ def main_menu():
 
 
 def new_expense():
+    date = datetime.date.today()
     name = input("What is new expense: ")
-    cost = input("What was the cost: ")
-
-    with open("data.txt", "a") as file:
-        file.write(f"{name},{cost}\n")
+    cost = int(input("What was the cost: "))
+    category = input("What was the category: ")
+    with open("expenses.csv", "a") as file:
+        file.write(f"{date},{category},{name},{cost}\n")
 
     print("Expense saved successfully")
 
 
 def view_expense():
     try:
-        with open("data.txt", "r") as file:
-            data = file.readlines()
+        with open("expenses.csv", "r") as file:
+            expenses = file.readlines()
 
-        if not data:
+        if not expenses:
             print("No expenses found")
             return
 
         print("\n--- Your Expenses ---")
-        for exp in data:
-            name, cost = exp.strip().split(",")
-            print(f"{name} : ₹{cost}")
+        for exp in expenses:
+            date, category, name, cost = exp.strip().split(",")
+            print(f"{date} | {category} | {name} | ₹{cost}")
 
     except FileNotFoundError:
         print("No expenses file found")
 
 
 def expense_analysis():
-    print("expense_analysis_selected")
+    try:
+        with open("expenses.csv","r") as file:
+            expenses = file.readlines()
+
+            if not expenses:
+                print("No expenses fount")
+                return
+            
+            print("\n--- Your Expenses ---")
+        for exp in expenses:
+            date, category, name, cost = exp.strip().split(",")
+            print(f"{date} | {category} | {name} | ₹{cost}")
+
+    except FileNotFoundError:
+        print("No expenses file found")
+
 
 
 def habit_tracker():
@@ -47,7 +65,7 @@ def save_and_exit():
     exit()
 
 
-# 🔁 MAIN LOOP (THIS WAS MISSING)
+
 while True:
     main_menu()
 
